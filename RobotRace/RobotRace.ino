@@ -22,8 +22,8 @@ long integral = 0;
 
 // Yes. We did name the robot Squirt.
 const char welcome_line1[] PROGMEM = " Hello,";
-const char demo_name_line1[] PROGMEM = "I am ";
-const char demo_name_line2[] PROGMEM = "Squirt!";
+const char demo_name_line1[] PROGMEM = "Killer";
+const char demo_name_line2[] PROGMEM = "Queen";
 
 // A couple of simple tunes, stored in program space.
 const char welcome[] PROGMEM = ">g32>>c32";
@@ -72,7 +72,7 @@ void load_custom_characters()
 //###################################################################
 //                    Plays The Jurassic Park Theme
 //###################################################################
-void playTheme(){
+void playJurasicParkTheme(){
   OrangutanBuzzer::playFrequency(523, 500, 10);   //C5
   delay(250);
   OrangutanBuzzer::playFrequency(247, 250, 10);   //B4
@@ -106,6 +106,21 @@ void playTheme(){
   OrangutanBuzzer::playFrequency(523, 1000, 10);   //C5
   delay(500);
   }
+
+//###################################################################
+//                    Plays Another One "Bytes" The Dust
+//###################################################################
+void playAnotherOneBytesTheDust(){
+  OrangutanBuzzer::play("!T110 V10 L16 RRag L8 eReReR L16 MS RRRe ML eReR g. MS Re ML aRRRR RRag L8 eReReR L16 MS RRRe ML eReR g. MS Re ML aRRRR");
+}
+
+//###################################################################
+//                    Plays We are the Champions
+//###################################################################
+void playWeAreTheChampions(){
+}
+
+
 
 //###################################################################
 //                    Calibration
@@ -223,10 +238,10 @@ void setup()
 
   OrangutanLCD::print("Go!");    
 
-  // Play music and wait for it to finish before we start driving.
-  playTheme();
-//  while(OrangutanBuzzer::isPlaying());
-  delay(2000);
+  // Play music and start driving.
+  playAnotherOneBytesTheDust();
+
+  delay(1000);
 }
 
 // The main function.  This function is repeatedly called by
