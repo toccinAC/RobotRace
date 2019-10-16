@@ -224,7 +224,7 @@ void setup()
   OrangutanLCD::print("Go!");    
 
   // Play music and wait for it to finish before we start driving.
-  playTheme();
+  //playTheme();
 //  while(OrangutanBuzzer::isPlaying());
   delay(2000);
 }
@@ -281,4 +281,9 @@ void loop()
     //right turn
     OrangutanMotors::setSpeeds(120, -50);
   }
+
+  OrangutanLCD::clear();
+  OrangutanLCD::print(position);
+  OrangutanLCD::gotoXY(0, 1);
 }
+
