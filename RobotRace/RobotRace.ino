@@ -200,6 +200,7 @@ void setup()
   delay(1000);
 
   calibration();
+ 
   // Display calibrated values as a bar graph.
   while (!OrangutanPushbuttons::isPressed(BUTTON_B))
   {
@@ -228,6 +229,22 @@ void setup()
 //  while(OrangutanBuzzer::isPlaying());
   delay(2000);
 }
+
+  void leftTurn(){
+      unsigned int position = robot.readLine(sensors, IR_EMITTERS_ON);
+      while (position<1800){
+        position = robot.readLine(sensors, IR_EMITTERS_ON);
+        OrangutanMotors::setSpeeds(-50, 120);
+      }
+  }
+
+  void rightTurn(){
+      unsigned int position = robot.readLine(sensors, IR_EMITTERS_ON);
+      while (position>2200){
+        position = robot.readLine(sensors, IR_EMITTERS_ON);
+        OrangutanMotors::setSpeeds(120, -50);
+      }
+  }
 
 // The main function.  This function is repeatedly called by
 // the Arduino framework.
@@ -261,7 +278,7 @@ void loop()
   // Compute the actual motor settings.  We never set either motor to a negative value.
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
-  const int maximum = 60;
+  const int maximum = 80;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
@@ -270,16 +287,22 @@ void loop()
   // This logic forces the hard 90 degree turns.
   // If the track is what we see on confluence
   // we may want to change this.
-  if (position < 1300){
+  if (position <= 1000){
     //left turn
-    OrangutanMotors::setSpeeds(-50, 120);
+    leftTurn();
   }
-  else if (position >= 1300 && position <2700)
+  else if (position >= 1000 && position <=3000){
     //straight line
-    OrangutanMotors::setSpeeds(80, 80);
+    if (power_difference < 0)
+    OrangutanMotors::setSpeeds(0,0);
+//    OrangutanMotors::setSpeeds((maximum + power_difference)*1.5, (maximum)*1.5);
+  else
+      OrangutanMotors::setSpeeds(0,0);
+//    OrangutanMotors::setSpeeds(maximum*1.5, (maximum - power_difference)*1.5);
+  }
   else{
     //right turn
-    OrangutanMotors::setSpeeds(120, -50);
+    rightTurn();
   }
 
   OrangutanLCD::clear();
