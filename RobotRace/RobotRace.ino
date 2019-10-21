@@ -232,18 +232,17 @@ void setup()
 
   void leftTurn(){
       unsigned int position = robot.readLine(sensors, IR_EMITTERS_ON);
-      while (position<1800){
         position = robot.readLine(sensors, IR_EMITTERS_ON);
         OrangutanMotors::setSpeeds(-50, 120);
-      }
+//        OrangutanMotors::setSpeeds(-15, 40);
   }
 
   void rightTurn(){
       unsigned int position = robot.readLine(sensors, IR_EMITTERS_ON);
-      while (position>2200){
-        position = robot.readLine(sensors, IR_EMITTERS_ON);
-        OrangutanMotors::setSpeeds(120, -50);
-      }
+      position = robot.readLine(sensors, IR_EMITTERS_ON);
+      OrangutanMotors::setSpeeds(120, -50);
+//        OrangutanMotors::setSpeeds(40, -15);
+      
   }
 
 // The main function.  This function is repeatedly called by
@@ -262,6 +261,7 @@ void loop()
   // position.
   int derivative = proportional - last_proportional;
   integral += proportional;
+  
 
   // Remember the last position.
   last_proportional = proportional;
@@ -279,6 +279,7 @@ void loop()
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
   const int maximum = 80;
+  const int multiplier = 2;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
@@ -292,13 +293,17 @@ void loop()
     leftTurn();
   }
   else if (position >= 1000 && position <=3000){
+    
     //straight line
-    if (power_difference < 0)
-    OrangutanMotors::setSpeeds(0,0);
-//    OrangutanMotors::setSpeeds((maximum + power_difference)*1.5, (maximum)*1.5);
-  else
-      OrangutanMotors::setSpeeds(0,0);
-//    OrangutanMotors::setSpeeds(maximum*1.5, (maximum - power_difference)*1.5);
+    if (power_difference < 0){
+//    OrangutanMotors::setSpeeds(20,20);
+      OrangutanMotors::setSpeeds((maximum + power_difference)*multiplier, (maximum)*multiplier);
+    }
+    else{
+      int mulitiplier = 2;
+//      OrangutanMotors::setSpeeds(20,20);
+      OrangutanMotors::setSpeeds((maximum)*multiplier, (maximum - power_difference)*multiplier);
+    }
   }
   else{
     //right turn
@@ -309,4 +314,3 @@ void loop()
   OrangutanLCD::print(position);
   OrangutanLCD::gotoXY(0, 1);
 }
-
