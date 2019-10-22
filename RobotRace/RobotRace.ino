@@ -149,6 +149,15 @@ void calibration(){
   OrangutanMotors::setSpeeds(0, 0);
 
 }
+
+boolean checkerBoard(){
+  if(sensors[1] > 800 && sensorsWhite[2] < 200 && sensors[3] > 800){
+    return true;
+    } else if (sensorsWhite[1] > 800 && sensors[2] < 200 && sensorsWhite[3] > 800){
+      return true;
+    }
+    return false;
+}
 //###################################################################
 //              Displays the sensor readings
 //###################################################################
@@ -298,7 +307,7 @@ void loop()
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
   const int maximum = 80;
-  const double multiplier = 1.75;
+  const double multiplier = 1.5;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
@@ -324,6 +333,10 @@ void loop()
 //    //right turn
 //    rightTurn();
 //  }
+
+    if(checkerBoard()){
+      OrangutanMotors::setSpeeds(0,0);
+    }
 
     if(sensors[0] > 800){
       //indicates that a line exists to the left of the robot
