@@ -22,8 +22,8 @@ long integral = 0;
 
 // Yes. We did name the robot Squirt.
 const char welcome_line1[] PROGMEM = " Hello,";
-const char demo_name_line1[] PROGMEM = "I am ";
-const char demo_name_line2[] PROGMEM = "Squirt!";
+const char demo_name_line1[] PROGMEM = "Killer";
+const char demo_name_line2[] PROGMEM = "Queen";
 
 // A couple of simple tunes, stored in program space.
 const char welcome[] PROGMEM = ">g32>>c32";
@@ -64,7 +64,7 @@ void load_custom_characters()
   OrangutanLCD::loadCustomCharacter(levels + 2, 2); // etc...
   OrangutanLCD::loadCustomCharacter(levels + 3, 3);
   OrangutanLCD::loadCustomCharacter(levels + 4, 4);
-  OrangutanLCD::loadCustomCharacter(levels + 5, 10); 
+  OrangutanLCD::loadCustomCharacter(levels + 5, 10);
   OrangutanLCD::loadCustomCharacter(levels + 6, 6);
   OrangutanLCD::clear(); // the LCD must be cleared for the characters to take effect
 }
@@ -72,7 +72,7 @@ void load_custom_characters()
 //###################################################################
 //                    Plays The Jurassic Park Theme
 //###################################################################
-void playTheme(){
+void playJurasicParkTheme(){
   OrangutanBuzzer::playFrequency(523, 500, 10);   //C5
   delay(250);
   OrangutanBuzzer::playFrequency(247, 250, 10);   //B4
@@ -83,7 +83,7 @@ void playTheme(){
   delay(500);
   OrangutanBuzzer::playFrequency(349, 500, 10);   //F4
   delay(500);
-  
+
   OrangutanBuzzer::playFrequency(523, 500, 10);   //C5
   delay(250);
   OrangutanBuzzer::playFrequency(247, 250, 10);   //B4
@@ -108,12 +108,27 @@ void playTheme(){
   }
 
 //###################################################################
+//                    Plays Another One "Bytes" The Dust
+//###################################################################
+void playAnotherOneBytesTheDust(){
+  OrangutanBuzzer::play("!T110 V10 L16 RRag L8 eReReR L16 MS RRRe ML eReR g. MS Re ML aRRRR RRag L8 eReReR L16 MS RRRe ML eReR g. MS Re ML aRRRR");
+}
+
+//###################################################################
+//                    Plays We are the Champions
+//###################################################################
+void playWeAreTheChampions(){
+}
+
+
+
+//###################################################################
 //                    Calibration
 //###################################################################
 void calibration(){
 
   unsigned int counter;
-  
+
   // Auto-calibration: turn right and left while calibrating the
   // sensors.
   for (counter=0; counter<80; counter++)
@@ -122,7 +137,7 @@ void calibration(){
       OrangutanMotors::setSpeeds(40, -40);
     else
       OrangutanMotors::setSpeeds(-40, 40);
-      
+
     robot.calibrateLineSensors(IR_EMITTERS_ON);
 
     // Since our counter runs to 80, the total delay will be
@@ -177,7 +192,7 @@ void setup()
   OrangutanLCD::printFromProgramSpace(demo_name_line2);
   delay(1000);
 
-  /* 
+  /*
    *  Display battery voltage and wait for button press.
    *  The button press shows the battery amount then begins
    *  the calibration process.
@@ -222,12 +237,12 @@ void setup()
 
   OrangutanLCD::clear();
 
-  OrangutanLCD::print("Go!");    
+  OrangutanLCD::print("Go!");
 
-  // Play music and wait for it to finish before we start driving.
-  //playTheme();
-//  while(OrangutanBuzzer::isPlaying());
-  delay(2000);
+  // Play music and start driving.
+  playAnotherOneBytesTheDust();
+
+  delay(1000);
 }
 
   void leftTurn(){
