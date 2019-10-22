@@ -244,7 +244,7 @@ void setup()
 //        OrangutanMotors::setSpeeds(40, -15);
       
   }
-
+char turner = "c";
 // The main function.  This function is repeatedly called by
 // the Arduino framework.
 void loop()
@@ -279,7 +279,7 @@ void loop()
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
   const int maximum = 80;
-  const int multiplier = 2;
+  const int multiplier = 1;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
@@ -288,6 +288,14 @@ void loop()
   // This logic forces the hard 90 degree turns.
   // If the track is what we see on confluence
   // we may want to change this.
+  if (sensors[0] > 800) {
+      turner = "l";
+  }else if (sensors[0] < 600 && sensors[4] < 600){
+      turner = "c";  
+  }else{
+      turner = "r";  
+  }
+  
   if (position <= 1000){
     //left turn
     leftTurn();
@@ -300,7 +308,6 @@ void loop()
       OrangutanMotors::setSpeeds((maximum + power_difference)*multiplier, (maximum)*multiplier);
     }
     else{
-      int mulitiplier = 2;
 //      OrangutanMotors::setSpeeds(20,20);
       OrangutanMotors::setSpeeds((maximum)*multiplier, (maximum - power_difference)*multiplier);
     }
