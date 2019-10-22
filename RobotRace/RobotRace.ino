@@ -298,7 +298,7 @@ void loop()
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
   const int maximum = 80;
-  const int multiplier = 1.5;
+  const double multiplier = 1.75;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
