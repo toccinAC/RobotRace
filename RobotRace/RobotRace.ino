@@ -279,6 +279,7 @@ void loop()
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
   const int maximum = 80;
+  const int multiplier = 1.5;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
@@ -294,11 +295,11 @@ void loop()
   else if (position >= 1000 && position <=3000){
     //straight line
     if (power_difference < 0)
-    OrangutanMotors::setSpeeds(0,0);
-//    OrangutanMotors::setSpeeds((maximum + power_difference)*1.5, (maximum)*1.5);
+//    OrangutanMotors::setSpeeds(0,0);
+    OrangutanMotors::setSpeeds((maximum + power_difference)*multiplier, (maximum)*multiplier);
   else
-      OrangutanMotors::setSpeeds(0,0);
-//    OrangutanMotors::setSpeeds(maximum*1.5, (maximum - power_difference)*1.5);
+//      OrangutanMotors::setSpeeds(0,0);
+    OrangutanMotors::setSpeeds(maximum*multiplier, (maximum - power_difference)*multiplier);
   }
   else{
     //right turn
@@ -309,4 +310,3 @@ void loop()
   OrangutanLCD::print(position);
   OrangutanLCD::gotoXY(0, 1);
 }
-
