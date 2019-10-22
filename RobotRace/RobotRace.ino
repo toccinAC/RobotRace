@@ -10,6 +10,7 @@
 
 Pololu3pi robot;
 unsigned int sensors[5]; // an array to hold sensor values
+unsigned int sensorsWhite[5]; // an array to hold sensor values
 unsigned int last_proportional = 0;
 long integral = 0;
 
@@ -24,7 +25,8 @@ long integral = 0;
 const char welcome_line1[] PROGMEM = " Hello,";
 const char demo_name_line1[] PROGMEM = "Killer";
 const char demo_name_line2[] PROGMEM = "Queen";
-
+int turner = 0;
+bool turnCheck = false;
 // A couple of simple tunes, stored in program space.
 const char welcome[] PROGMEM = ">g32>>c32";
 const char go[] PROGMEM = "L16 cdegreg4";
@@ -240,7 +242,7 @@ void setup()
   OrangutanLCD::print("Go!");
 
   // Play music and start driving.
-  playAnotherOneBytesTheDust();
+//  playAnotherOneBytesTheDust();
 
   delay(1000);
 }
@@ -269,6 +271,8 @@ void loop()
   // the "sensors" argument to read_line() here, even though we
   // are not interested in the individual sensor readings.
   unsigned int position = robot.readLine(sensors, IR_EMITTERS_ON);
+  unsigned int positionWhite = robot.readLine(sensorsWhite, IR_EMITTERS_ON, 1);
+  
 
   // The "proportional" term should be 0 when we are on the line.
   int proportional = (int)position - 2000;
@@ -303,25 +307,53 @@ void loop()
   // This logic forces the hard 90 degree turns.
   // If the track is what we see on confluence
   // we may want to change this.
-  if (position <= 1000){
-    //left turn
-    leftTurn();
-  }
-  else if (position >= 1000 && position <=3000){
-    //straight line
-    if (power_difference < 0)
-//    OrangutanMotors::setSpeeds(0,0);
-    OrangutanMotors::setSpeeds((maximum + power_difference)*multiplier, (maximum)*multiplier);
-  else
-//      OrangutanMotors::setSpeeds(0,0);
-    OrangutanMotors::setSpeeds(maximum*multiplier, (maximum - power_difference)*multiplier);
-  }
-  else{
-    //right turn
-    rightTurn();
-  }
+//  if (position <= 1000){
+//    //left turn
+//    leftTurn();
+//  }
+//  else if (position >= 1000 && position <=3000){
+//    //straight line
+//    if (power_difference < 0)
+////    OrangutanMotors::setSpeeds(0,0);
+//    OrangutanMotors::setSpeeds((maximum + power_difference)*multiplier, (maximum)*multiplier);
+//  else
+////      OrangutanMotors::setSpeeds(0,0);
+//    OrangutanMotors::setSpeeds(maximum*multiplier, (maximum - power_difference)*multiplier);
+//  }
+//  else{
+//    //right turn
+//    rightTurn();
+//  }
 
-  OrangutanLCD::clear();
-  OrangutanLCD::print(position);
-  OrangutanLCD::gotoXY(0, 1);
+    if(sensors[0] > 800){
+      //indicates that a line exists to the left of the robot
+      turner = 1;
+      turnCheck = true;
+    }else if(sensors[1]){
+      //indicates that a line exists to the right of the robot
+      turner = 2;
+      turnCheck = true;
+    }
+
+    if(sensors[0] < 400 && sensors[4] < 400){
+      if (power_difference < 0)
+//    OrangutanMotors::setSpeeds(0,0);
+        OrangutanMotors::setSpeeds((maximum + power_difference)*multiplier, (maximum)*multiplier);
+      else
+    //      OrangutanMotors::setSpeeds(0,0);
+        OrangutanMotors::setSpeeds(maximum*multiplier, (maximum - power_difference)*multiplier);
+    }
+
+    if((sensors[0] > 800 && sensorsWhite[4] <200) && turner == 1){
+      //this is an empty space to the right that detected a line on the left
+      leftTurn();
+    }
+
+    if((sensorsWhite[0] < 200 && sensors[4] > 800) && turner == 2){
+      //this is an empty space to the left that detected a line on the right
+      rightTurn();  
+    }
+    OrangutanLCD::clear();
+    OrangutanLCD::print(position);
+    OrangutanLCD::gotoXY(0, 1);
 }
