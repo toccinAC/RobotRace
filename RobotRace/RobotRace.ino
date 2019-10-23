@@ -240,7 +240,7 @@ void setup()
   OrangutanLCD::print("Go!");
 
   // Play music and start driving.
-  playAnotherOneBytesTheDust();
+//  playAnotherOneBytesTheDust();
 
   delay(1000);
 }
@@ -288,13 +288,13 @@ void loop()
   // the sharpness of the turn.  You can adjust the constants by which
   // the proportional, integral, and derivative terms are multiplied to
   // improve performance.
-  int power_difference = proportional/15 + integral/10000 + derivative*3/2;
+  int power_difference = proportional/40 + integral/10000 + derivative*6/2;
 
   // Compute the actual motor settings.  We never set either motor to a negative value.
   // This is so the car can move on a curved line
   // It will keep the car moving forward.
   const int maximum = 80;
-  const int multiplier = 1.5;
+  const int multiplier = 1;
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < -maximum)
@@ -317,7 +317,7 @@ void loop()
     OrangutanMotors::setSpeeds(maximum*multiplier, (maximum - power_difference)*multiplier);
   }
   else{
-    //right turn
+//    //right turn
     rightTurn();
   }
 
